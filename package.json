@@ -1,0 +1,22 @@
+{
+  "name": "wolf-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "VITE_APP_GIT_DESCRIBE=$(git describe --tags --long --always) vite",
+    "build": "VITE_APP_GIT_DESCRIBE=$(git describe --tags --long --always) vite build",
+    "preview": "vite preview",
+    "compress": "tar -czvf ui.tar.gz --directory=dist ."
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "axios": "^1.5.1",
+    "bootstrap": "^5.3.2",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
+    "vite": "^4.4.9"
+  }
+}
