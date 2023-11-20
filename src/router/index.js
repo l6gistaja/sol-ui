@@ -1,5 +1,6 @@
 import LoginView from '../views/LoginView.vue';
 import HomeView from '../views/HomeView.vue';
+import StatsView from '../views/StatsView.vue';
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
@@ -15,6 +16,12 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/statistics',
+      name: 'stats',
+      component: StatsView,
       meta: { requiresAuth: false }
     }
   ]

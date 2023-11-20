@@ -1,11 +1,12 @@
 <template>
   <main>
-    <p class="display-6 mt-5 text-primary text-center font-weight-bold">Welcome to user interface!</p>
+    <PageTitle>Welcome to user interface!</PageTitle>
   </main>
 </template>
 
 <script>
 
+import PageTitle from '../components/PageTitle.vue'
 
 export default {
   data() {
