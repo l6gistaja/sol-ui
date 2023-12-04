@@ -1,38 +1,25 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center align-items-center vh-100">
-      <div class="col-md-4">
-        <form @submit.prevent="login">
-          <div class="form-group mb-2">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Username"
-              v-model="username"
-            />
-          </div>
-          <div class="form-group mb-2">
-            <input
-              type="password"
-              class="form-control"
-              placeholder="Password"
-              v-model="password"
-            />
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-          </div>
-          <div class="form-group">
-            <Wuilert :msg="wuilertMsg" />
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+
+  <authenticator>
+    <template v-slot="{ user, signOut }">
+      <h1>Hello {{ user.username }}!</h1>
+      <button @click="signOut">Sign Out</button>
+    </template>
+  </authenticator>
+
 </template>
 
 <script setup>
 import Wuilert from "../components/Wuilert.vue";
+
+  import { Authenticator } from "@aws-amplify/ui-vue";
+  import "@aws-amplify/ui-vue/styles.css";
+
+  import { Amplify } from 'aws-amplify';
+  import awsconfig from '../aws-exports';
+
+  Amplify.configure(awsconfig);
+
 </script>
 
 <script>
@@ -67,4 +54,3 @@ export default {
 };
 </script>
 
-<style></style>

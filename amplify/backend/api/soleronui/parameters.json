@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "soleronui",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authsoleronui6fdfb612",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2023-12-04T19:12:10.796Z"
+}

@@ -31,10 +31,13 @@ import { RouterLink, RouterView } from "vue-router";
             <RouterLink :to="{ name: 'home' }" class="nav-link">Home</RouterLink>
           </li>
           <li class="nav-item">
+            <RouterLink :to="{ name: 'devices' }" class="nav-link">Devices</RouterLink>
+          </li>
+          <li class="nav-item">
             <RouterLink :to="{ name: 'stats' }" class="nav-link">Statistics</RouterLink>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click="logout"> Logout </a>
+            <a class="nav-link" href="#" @click="logout">Logout</a>
           </li>
         </ul>
       </div>

@@ -1,11 +1,26 @@
-import LoginView from '../views/LoginView.vue';
+
+import DeviceView from '../views/DeviceView.vue';
+import DevicesView from '../views/DevicesView.vue';
 import HomeView from '../views/HomeView.vue';
+import LoginView from '../views/LoginView.vue';
 import StatsView from '../views/StatsView.vue';
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/device',
+      name: 'device',
+      component: DeviceView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/devices',
+      name: 'devices',
+      component: DevicesView,
+      meta: { requiresAuth: false }
+    },
     {
       path: '/',
       name: 'home',

@@ -5,9 +5,13 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
 import PageTitle from '../components/PageTitle.vue'
+
+</script>
+
+<script>
 
 import {
   Chart as ChartJS,
@@ -70,5 +74,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>
