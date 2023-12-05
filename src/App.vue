@@ -1,10 +1,6 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
 <template>
   <div class="conatiner-fluid">
-    <div class="row" v-if="authenticatedUser != ''">
+    <div class="row" v-if="auth.route === 'authenticated'">
       <!-- Toggle Button for Small Views -->
       <!-- Vertical Navbar -->
       <nav class="navbar navbar-expand-md navbar-light bg-light d-md-none">
@@ -37,7 +33,7 @@ import { RouterLink, RouterView } from "vue-router";
             <RouterLink :to="{ name: 'stats' }" class="nav-link">Statistics</RouterLink>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click="logout">Logout</a>
+            <a class="nav-link" href="#" @click="auth.signOut">Logout</a>
           </li>
         </ul>
       </div>
@@ -47,37 +43,27 @@ import { RouterLink, RouterView } from "vue-router";
       </main>
     </div>
 
-    <div class="row" v-if="authenticatedUser == ''">
+    <div class="row" v-if="auth.route !== 'authenticated'">
       <RouterView />
     </div>
   </div>
 </template>
 
+<script setup>
+  import { RouterLink, RouterView } from "vue-router";
+  import { useAuthenticator } from "@aws-amplify/ui-vue";
+  const auth = useAuthenticator();
+</script>
+
 <script>
 export default {
   data: function () {
     return {
-      authenticatedUser: "",
     };
   },
   mounted() {
-    window.myVueInstance = this;
-    window.addEventListener("Wolf-UI-login", (event) => {
-      this.authenticatedUser = event.detail.username;
-    });
-    if (this.authenticatedUser == "") {
-      this.logout();
-    }
   },
   methods: {
-    logout() {
-      // Remove the stored credentials
-      localStorage.removeItem("authCredentials");
-      this.authenticatedUser = "";
-
-      // Redirect the user to the login page
-      this.$router.push({ name: "login" });
-    },
   },
 };
 </script>
