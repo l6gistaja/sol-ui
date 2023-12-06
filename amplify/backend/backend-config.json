@@ -1,32 +1,7 @@
 {
-  "api": {
-    "soleronui": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "soleronui6fdfb612"
-        }
-      ],
-      "output": {
-        "authConfig": {
-          "additionalAuthenticationProviders": [],
-          "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authsoleronui6fdfb612"
-            }
-          }
-        }
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "AppSync"
-    }
-  },
+  "api": {},
   "auth": {
-    "soleronui6fdfb612": {
+    "soleronui915b34fe": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {

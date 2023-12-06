@@ -1,12 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
-  "api": {
-    "soleronui": {
-      "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string"
-    }
-  },
   "auth": {
-    "soleronui6fdfb612": {
+    "soleronui915b34fe": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
