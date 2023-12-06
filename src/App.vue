@@ -24,9 +24,6 @@
       >
         <ul class="nav flex-column">
           <li class="nav-item">
-            <RouterLink :to="{ name: 'home' }" class="nav-link">Home</RouterLink>
-          </li>
-          <li class="nav-item">
             <RouterLink :to="{ name: 'devices' }" class="nav-link">Devices</RouterLink>
           </li>
           <li class="nav-item">

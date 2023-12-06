@@ -2,10 +2,7 @@
   <br/><br/>
   <authenticator>
     <template v-slot="{ user, signOut }">
-      <center>
-      <br/><br/>{{ user.signInDetails.loginId }}
-      <br/><br/><button class="btn btn-primary" @click="signOut">Sign Out</button>
-      </center>
+      <PageTitle>Welcome to Soleron user interface!</PageTitle>
     </template>
   </authenticator>
 </template>
@@ -16,6 +13,8 @@
   import { Amplify } from 'aws-amplify';
   import awsconfig from '../aws-exports';
   Amplify.configure(awsconfig);
+
+  import PageTitle from '../components/PageTitle.vue'
 
 </script>
 
