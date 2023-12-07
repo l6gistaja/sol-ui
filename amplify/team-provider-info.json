@@ -9,12 +9,26 @@
       "UnauthRoleName": "amplify-soleronui-dev-182648-unauthRole",
       "StackName": "amplify-soleronui-dev-182648",
       "StackId": "arn:aws:cloudformation:eu-north-1:162070837102:stack/amplify-soleronui-dev-182648/ecc4d4d0-92c1-11ee-b201-0eb1561e920a",
-      "AmplifyAppId": "d28b8qycbvvlxu"
+      "AmplifyAppId": "d28b8qycbvvlxu",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-soleronui-dev-182648-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "soleronuif434d91e": {},
         "soleronui915b34fe": {}
+      },
+      "function": {
+        "UiApiTest": {
+          "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
+          "s3Key": "amplify-builds/UiApiTest-32387643456674345558-build.zip"
+        },
+        "UiApiShadow": {
+          "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
+          "s3Key": "amplify-builds/UiApiShadow-747037425a37674b4236-build.zip"
+        }
+      },
+      "api": {
+        "SoleronUIAPI": {}
       }
     }
   }

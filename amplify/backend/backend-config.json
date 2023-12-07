@@ -1,5 +1,28 @@
 {
-  "api": {},
+  "api": {
+    "SoleronUIAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "UiApiTest"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "UiApiShadow"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "soleronui915b34fe": {
       "customAuth": false,
@@ -26,6 +49,52 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "UiApiShadow": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "UiApiTest": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_UiApiShadow_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UiApiShadow"
+        }
+      ]
+    },
+    "AMPLIFY_function_UiApiShadow_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UiApiShadow"
+        }
+      ]
+    },
+    "AMPLIFY_function_UiApiTest_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UiApiTest"
+        }
+      ]
+    },
+    "AMPLIFY_function_UiApiTest_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UiApiTest"
+        }
+      ]
     }
   }
 }

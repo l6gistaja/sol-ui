@@ -30,6 +30,9 @@
             <RouterLink :to="{ name: 'stats' }" class="nav-link">Statistics</RouterLink>
           </li>
           <li class="nav-item">
+            <RouterLink :to="{ name: 'sandbox' }" class="nav-link">Sandbox</RouterLink>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#" @click="auth.signOut">Logout</a>
           </li>
         </ul>

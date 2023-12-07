@@ -2,6 +2,7 @@
 import DeviceView from '../views/DeviceView.vue'
 import DevicesView from '../views/DevicesView.vue'
 import LoginView from '../views/LoginView.vue'
+import SandboxView from '../views/SandboxView.vue'
 import StatsView from '../views/StatsView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAuthenticator } from "@aws-amplify/ui-vue"
@@ -28,6 +29,12 @@ const router = createRouter({
       name: 'login',
       component: LoginView,
       meta: { requiresAuth: false }
+    },
+    {
+      path: '/sandbox',
+      name: 'sandbox',
+      component: SandboxView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/statistics',
