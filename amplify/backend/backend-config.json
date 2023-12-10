@@ -61,6 +61,22 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "dynaTrigger593bc54b": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "dyna"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -95,6 +111,28 @@
           "resourceName": "UiApiTest"
         }
       ]
+    },
+    "AMPLIFY_function_dynaTrigger593bc54b_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dynaTrigger593bc54b"
+        }
+      ]
+    },
+    "AMPLIFY_function_dynaTrigger593bc54b_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "dynaTrigger593bc54b"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "dyna": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "resourceName": "dyna",
+  "tableName": "dyna",
+  "partitionKey": {
+    "fieldName": "id",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "dv",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": [
+    "dynaTrigger593bc54b"
+  ]
+}

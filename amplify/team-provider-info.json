@@ -24,11 +24,18 @@
         },
         "UiApiShadow": {
           "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
-          "s3Key": "amplify-builds/UiApiShadow-747037425a37674b4236-build.zip"
+          "s3Key": "amplify-builds/UiApiShadow-4a4c786e44622f723064-build.zip"
+        },
+        "dynaTrigger593bc54b": {
+          "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
+          "s3Key": "amplify-builds/dynaTrigger593bc54b-644b596149577a52756e-build.zip"
         }
       },
       "api": {
         "SoleronUIAPI": {}
+      },
+      "storage": {
+        "dyna": {}
       }
     }
   }
