@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageTitle>Stats</PageTitle>
+    <PageTitle>Statistics (DEMO)</PageTitle>
     <Line :data="data" :options="options" />
   </div>
 </template>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@aws-amplify/ui-vue": "^4.0.2",
+    "@intlify/unplugin-vue-i18n": "^1.6.0",
     "@popperjs/core": "^2.11.8",
     "aws-amplify": "^6.0.5",
     "axios": "^1.5.1",
@@ -17,6 +18,7 @@
     "chart.js": "^4.4.0",
     "vue": "^3.3.4",
     "vue-chartjs": "^5.2.0",
+    "vue-i18n": "^9.8.0",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {

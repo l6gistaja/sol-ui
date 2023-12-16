@@ -1,6 +1,5 @@
 
-import DeviceView from '../views/DeviceView.vue'
-import DevicesView from '../views/DevicesView.vue'
+import PlantsView from '../views/PlantsView.vue'
 import LoginView from '../views/LoginView.vue'
 import SandboxView from '../views/SandboxView.vue'
 import StatsView from '../views/StatsView.vue'
@@ -13,22 +12,16 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/device',
-      name: 'device',
-      component: DeviceView,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/devices',
-      name: 'devices',
-      component: DevicesView,
-      meta: { requiresAuth: true }
-    },
-    {
       path: '/',
       name: 'login',
       component: LoginView,
       meta: { requiresAuth: false }
+    },
+    {
+      path: '/plants',
+      name: 'plants',
+      component: PlantsView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/sandbox',

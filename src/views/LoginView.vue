@@ -5,6 +5,7 @@
         <PageTitle>Welcome to Soleron user interface!</PageTitle>
       </template>
     </authenticator>
+    <!-- .{{route}}. <button class="btn btn-danger" @click="signOut">Signout</button> -->
   </div>
 </template>
 
@@ -14,6 +15,12 @@
   import awsconfig from '../aws-exports';
   Amplify.configure(awsconfig);
   import PageTitle from '../components/PageTitle.vue'
+
+/*
+  import { toRefs } from 'vue';
+  import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue';
+  const { route, user, signOut } = toRefs(useAuthenticator());
+*/
 </script>
 
 <style scoped>

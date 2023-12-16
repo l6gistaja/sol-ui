@@ -24,7 +24,7 @@
       >
         <ul class="nav flex-column">
           <li class="nav-item">
-            <RouterLink :to="{ name: 'devices' }" class="nav-link">Devices</RouterLink>
+            <RouterLink :to="{ name: 'plants' }" class="nav-link">{{ $t("plants.title") }}</RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink :to="{ name: 'stats' }" class="nav-link">Statistics</RouterLink>
@@ -33,7 +33,7 @@
             <RouterLink :to="{ name: 'sandbox' }" class="nav-link">Sandbox</RouterLink>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click="auth.signOut">Logout</a>
+            <a class="nav-link" href="#" @click="auth.signOut">{{ $t("common.logout") }}</a>
           </li>
         </ul>
       </div>

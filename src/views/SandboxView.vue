@@ -11,7 +11,7 @@
     </table>
     <hr/>
 
-    <button class="btn btn-warning btn-sm" @click="getShadow">Get shadow</button>
+    <button class="btn btn-warning btn-sm" @click="getShadow">Get shadow</button>&nbsp;
     <button class="btn btn-warning btn-sm" @click="updateShadow">Change welcome</button>
     <input type="text" v-model="shadowFieldVal"/>
     {{shadow}}

@@ -1,35 +1,18 @@
 import { fileURLToPath, URL } from 'node:url'
+import { resolve, dirname } from 'node:path'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    VueI18nPlugin({
+      include: resolve(dirname(fileURLToPath(import.meta.url)), './src/i18n/locales/**')
+    })
   ],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://w13.app.foxiot.eu:8443',
-        changeOrigin: true,
-        //rewrite: (path) => path.replace(/^\/api/, '')
-        //rewrite: path
-      },
-      '/reboot': {
-        target: 'https://w13.app.foxiot.eu:8443',
-        changeOrigin: true,
-      },
-      '/restartapp': {
-        target: 'https://w13.app.foxiot.eu:8443',
-        changeOrigin: true,
-      },
-      '/save': {
-        target: 'https://w13.app.foxiot.eu:8443',
-        changeOrigin: true,
-      }
-    }
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
