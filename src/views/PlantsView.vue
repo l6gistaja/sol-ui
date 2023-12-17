@@ -1,6 +1,11 @@
 <template>
   <main>
-    <PageTitle>{{ $t("plants.title") }}</PageTitle>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><RouterLink :to="{ name: 'plants'}" >{{ $t("plants.title") }}</RouterLink></li>
+      </ol>
+    </nav>
+    <RouterLink :to="{ name: 'plant', params: {id: 'add'} }" class="btn btn-sm btn-success" :title="$t('common.add')">+</RouterLink>
   </main>
 </template>
 
@@ -11,13 +16,13 @@ import awsconfig from '../aws-exports'
 Amplify.configure(awsconfig)
 import { get, post } from 'aws-amplify/api'
 
-import PageTitle from '../components/PageTitle.vue'
-
 </script>
 
 <script>
 
 export default {
+  name: 'plants',
+  /*
   data() {
     return {
     };
@@ -26,6 +31,7 @@ export default {
   methods: {
 
   }
+  */
 };
 </script>
 

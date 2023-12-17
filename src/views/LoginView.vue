@@ -16,11 +16,25 @@
   Amplify.configure(awsconfig);
   import PageTitle from '../components/PageTitle.vue'
 
-/*
+
   import { toRefs } from 'vue';
   import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue';
   const { route, user, signOut } = toRefs(useAuthenticator());
+
+</script>
+<script>
+/*
+export default {
+  data() {
+    return {}
+  },
+  mounted() {
+    console.log('cookie '+window.document.cookie, this.user)
+  }
+
+}
 */
+
 </script>
 
 <style scoped>

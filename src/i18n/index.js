@@ -3,10 +3,32 @@ import { createI18n } from "vue-i18n";
 const messages = {
     en: {
         common: {
-            logout: "Logout"
+            add: "Add",
+            cancel: "Cancel",
+            edit: "Edit",
+            fill: "Please fill this field.",
+            fixErrors: "Fix form errors above.",
+            logout: "Logout",
+            name: "Name",
+            save: "Save"
         },
         plants: {
-            title: "Plants"
+            title: "Plants",
+            address: "Address",
+            grid: "Grid connection",
+            gridOptions: {
+                "N": "not connected",
+                "L": "low voltage",
+                "M": "medium voltage",
+                "H": "high voltage"
+            },
+            type: "ESS type",
+            typeOptions: {
+                "P": "PV input included",
+                "C": "EV charge included",
+                "S": "ESS storage"
+            },
+            tz: "Timezone"
         }
     }
 }

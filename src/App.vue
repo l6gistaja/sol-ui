@@ -56,6 +56,7 @@
 </script>
 
 <script>
+/*
 export default {
   data: function () {
     return {
@@ -66,6 +67,7 @@ export default {
   methods: {
   },
 };
+*/
 </script>
 
 <style scoped>
