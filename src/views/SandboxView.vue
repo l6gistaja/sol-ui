@@ -6,18 +6,17 @@
         <li class="breadcrumb-item active">Sandbox</li>
       </ol>
     </nav>
-
-    <table>
-      <tr>
-        <td><button class="btn btn-warning btn-sm" @click="addDoc">+</button></td>
-        <td><input type="text" id="n"></td>
-        <td></td>
-      </tr>
-    </table>
+    
     <hr/>
 
-    <button class="btn btn-warning btn-sm" @click="getShadow">Get shadow</button>&nbsp;
-    <button class="btn btn-warning btn-sm" @click="updateShadow">Change welcome</button>
+    <button class="btn btn-warning btn-sm" @click="getShadow(thingName)">Get shadow</button>&nbsp;
+    Shadow = <input type="text" v-model="thingName"/>
+    {{shdw}}
+    <hr/>
+
+    Shadow = test123
+    <button class="btn btn-warning btn-sm" @click="getShadowtest123('test123')">Get shadow</button>&nbsp;
+    <button class="btn btn-warning btn-sm" @click="updateShadow('test123', {welcome: shadowFieldVal})">Change welcome</button>
     <input type="text" v-model="shadowFieldVal"/>
     {{shadow}}
     <hr/>
@@ -48,7 +47,10 @@ export default {
       testGet: '',
       testPost: '',
       shadow: '',
-      shadowFieldVal: ''
+      shadowFieldVal: '',
+
+      shdw: '',
+      thingName: 'c2d52a12-b9bd-4b37-a7a4-9b07f6d342db'
     };
   },
 
@@ -95,7 +97,26 @@ export default {
       }
     },
 
-    async getShadow() {
+    async getShadow(thing) {
+      this.shdw = 'LOADING ...';
+      try {
+        const restOperation = get({ 
+          apiName: 'SoleronUIAPI',
+          path: '/shadow',
+          options: {
+            queryParams: {
+              thing: thing
+            }
+          }
+        });
+        const { body } = await restOperation.response
+        this.shdw = await body.text()
+      } catch (error) {
+        this.shdw = 'Call failed: ' + error
+      }
+    },
+
+    async getShadowtest123(thing) {
       this.shadow = 'LOADING ...';
       try {
         const restOperation = get({ 
@@ -103,7 +124,7 @@ export default {
           path: '/shadow',
           options: {
             queryParams: {
-              thing: 'test123'
+              thing: thing
             }
           }
         });
@@ -116,17 +137,15 @@ export default {
       }
     },
 
-    async updateShadow() {
+    async updateShadow(thing, body) {
       this.shadow = 'LOADING ...';
       try {
         const restOperation = post({
           apiName: 'SoleronUIAPI',
           path: '/shadow',
           options: {
-            queryParams: {thing: 'test123' },
-            body: {
-              welcome: this.shadowFieldVal,
-            }
+            queryParams: {thing: thing},
+            body: body
           }
         });
         const { body } = await restOperation.response
