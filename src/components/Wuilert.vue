@@ -56,7 +56,7 @@ export default {
                 }
             }
             this.data = data;
-            console.log(data);
+            //console.log(data);
             if(data.ttl != 0 && data.text != '') {
                 this.intervalMsg = newVal;
                 setTimeout(this.chkBeforeHide, parseInt(data.ttl));

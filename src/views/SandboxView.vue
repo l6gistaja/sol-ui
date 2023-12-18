@@ -1,6 +1,11 @@
 <template>
   <main>
-    <PageTitle>Sandbox</PageTitle>
+  
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb sol-breadcrumb">
+        <li class="breadcrumb-item active">Sandbox</li>
+      </ol>
+    </nav>
 
     <table>
       <tr>
@@ -32,8 +37,6 @@ import { Amplify } from 'aws-amplify'
 import awsconfig from '../aws-exports'
 Amplify.configure(awsconfig)
 import { get, post } from 'aws-amplify/api'
-
-import PageTitle from '../components/PageTitle.vue'
 
 </script>
 

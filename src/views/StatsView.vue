@@ -1,15 +1,15 @@
 <template>
   <div>
-    <PageTitle>Statistics (DEMO)</PageTitle>
+    
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb sol-breadcrumb">
+          <li class="breadcrumb-item active">Statistics (DEMO)</li>
+        </ol>
+      </nav>
+
     <Line :data="data" :options="options" />
   </div>
 </template>
-
-<script setup>
-
-import PageTitle from '../components/PageTitle.vue'
-
-</script>
 
 <script>
 

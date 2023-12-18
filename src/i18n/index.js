@@ -2,16 +2,26 @@ import { createI18n } from "vue-i18n";
 
 const messages = {
     en: {
+
         common: {
             add: "Add",
             cancel: "Cancel",
             edit: "Edit",
+            del: "Delete",
             fill: "Please fill this field.",
             fixErrors: "Fix form errors above.",
             logout: "Logout",
             name: "Name",
             save: "Save"
         },
+
+        inverters: {
+            title: "Inverters",
+            noInverters: "Plant should have at least one inverter.",
+            serial: "Serial number",
+            shadow: "Shadow"
+        },
+
         plants: {
             title: "Plants",
             address: "Address",

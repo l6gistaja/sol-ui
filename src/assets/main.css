@@ -1,4 +1,12 @@
-.wolf-btn {
-    margin-bottom: 20px;
-    margin-left: 10px;
+.sol-breadcrumb {
+    font-weight: bold;
+}
+
+.sol-form-footer {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.sol-grouptitle {
+    font-weight: bold;
 }
