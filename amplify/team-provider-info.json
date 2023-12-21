@@ -20,22 +20,15 @@
       "function": {
         "UiApiTest": {
           "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
-          "s3Key": "amplify-builds/UiApiTest-32387643456674345558-build.zip"
+          "s3Key": "amplify-builds/UiApiTest-676e6142437936706a4a-build.zip"
         },
         "UiApiShadow": {
           "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
           "s3Key": "amplify-builds/UiApiShadow-4a4c786e44622f723064-build.zip"
-        },
-        "dynaTrigger593bc54b": {
-          "deploymentBucketName": "amplify-soleronui-dev-182648-deployment",
-          "s3Key": "amplify-builds/dynaTrigger593bc54b-644b596149577a52756e-build.zip"
         }
       },
       "api": {
         "SoleronUIAPI": {}
-      },
-      "storage": {
-        "dyna": {}
       }
     }
   }
