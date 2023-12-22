@@ -20,12 +20,12 @@
             type="text"
             :placeholder="$t('common.fill')"
             class="form-control form-control-sm"
-            :class="{'is-invalid': 'name' in formErrors}"
+            :class="{'is-invalid': formErrors['name'] != ''}"
           />
-          <div v-if="'name' in formErrors" class="invalid-feedback">{{formErrors.name}}</div>
+          <div v-if="formErrors['name'] != ''" class="invalid-feedback">{{formErrors.name}}</div>
         </template>
       </FormRow>
-
+<!--
       <FormRow>
         <template v-slot:label>{{$t('plants.type')}}</template>
         <template v-slot:field>
@@ -52,7 +52,7 @@
           </select>
         </template>
       </FormRow>
-
+-->
       <FormRow>
         <template v-slot:label>{{$t('plants.address')}}</template>
         <template v-slot:field>
@@ -63,7 +63,7 @@
           />
         </template>
       </FormRow>
-
+<!--
       <FormRow>
         <template v-slot:label>{{$t('plants.tz')}}</template>
         <template v-slot:field>
@@ -76,14 +76,18 @@
           </select>
         </template>
       </FormRow>
-
+-->
       <div class="sol-grouptitle">
-        <button class="btn btn-sm btn-success" :title="$t('common.add')" @click="addInverter">+</button>&nbsp;
+        <button class="btn btn-sm btn-success" :title="$t('common.add')" 
+          @click="addInverter">
+            +
+        </button>&nbsp;
         <strong>{{$t('inverters.title')}}</strong>
       </div>
+
       <div v-if="'invertersErr' in formErrors" class="inverter-err">{{formErrors.invertersErr}}</div>
 
-      <div class="card inverter-card" v-for="(item, index) in data.inverter" :key="index">
+      <div class="card inverter-card" v-for="(item, index) in data.inverters" :key="index">
         <div class="card-body">
 
           <FormRow>
@@ -94,11 +98,12 @@
                 type="text"
                 :placeholder="$t('common.fill')"
                 class="form-control form-control-sm"
-                :class="{'is-invalid': 'name' in formErrors.inverter[index]}"
-              />
-              <div v-if="'name' in formErrors.inverter[index]" class="invalid-feedback">{{formErrors.inverter[index].name}}</div>
+                :class="{'is-invalid': formErrors.inverters[index]['name'] != ''}" 
+                />
+                <div v-if="formErrors.inverters[index]['name'] != ''" class="invalid-feedback">{{formErrors.inverters[index]['name']}}</div>
             </template>
           </FormRow>
+
 
           <FormRow>
             <template v-slot:label>{{$t('inverters.serial')}}</template>
@@ -122,9 +127,11 @@
             </template>
           </FormRow>
 
-          <button class="btn btn-danger btn-sm" :title="$t('common.del')" @click="deleteFormSubItem('inverter', index)">
+          <button class="btn btn-danger btn-sm" :title="$t('common.del')" 
+            @click="deleteFormSubItem(data.inverters, formErrors.inverters, index)">
             {{$t('common.del')}}
           </button>
+
         </div>
       </div>
       
@@ -154,90 +161,124 @@ export default {
   
   data() {
     return {
-        model: {
-          name: {notEmpty: 1},
-          type: {default: 'S', options: ['S','P','C']},
-          grid: {default: 'N', options: ['N','L','M','H']},
-          address: {},
-          tz: {default: Intl.DateTimeFormat().resolvedOptions().timeZone}
-        },
-        subModels: {
-          inverter: {
-            name: {notEmpty: 1},
-            serial: {},
-            shadow: {}
-          }
-        },
-        data: null,
+        data: {},
         formErrors: {},
         errorCount: 0,
-        wuilertMsg: '{"msg":""}'
+        wuilertMsg: '{"msg":""}',
+
+        dataModel: {
+          dataModelType: "map",
+          attributes: {
+            name: {notEmpty: 1},
+            type: {default: "S", options: ["S","P","C"], i18n: "~"},
+            grid: {default: "N", options: ["N","L","M","H"], i18n: "~"},
+            address: {},
+            //Intl.DateTimeFormat().resolvedOptions().timeZone
+            tz: {default: "Europe/Tallinn", options: ["Europe/Tallinn"]},
+            inverters: {
+              dataModelType: 'array',
+              attributes: {
+                name: {notEmpty: 1},
+                serial: {},
+                shadow: {}
+              }
+            }
+
+          }
+        }
     };
   },
 
   created() {
-    this.data = this.generateDefaultData(this.model)
-    for(let i in this.subModels) {
-      this.data[i] = []
-      this.formErrors[i] = {}
-    }
+    let gData = this.generateDefaultData(this.dataModel)
+    this.data = gData.data
+    this.formErrors = gData.errors
   },
   
   methods: {
 
-    addFormSubItem(subModel) {
-      this.data[subModel].unshift(this.generateDefaultData(this.subModels[subModel]))
-      this.formErrors[subModel].unshift({})
-    },
+    //////////////// Generic functions
 
-    deleteFormSubItem(subModel,index) {
-      this.data[subModel].splice(index, 1)
-      this.formErrors[subModel].splice(index, 1)
-    },
-
-    generateDefaultData(template) {
-      let data = {}
-      for(let i in template) {
-        data[i] = 'default' in template[i] ? ''+template[i].default : ''
-      }
-      return data
-    },
-
-    validateFields(errors, model, data) {
-      //console.log(Math.random()+'//'+JSON.stringify(data)+'//'+JSON.stringify(model))
-      for(let i in model) {
-        if('notEmpty' in model[i] && !data[i].match(/\S/)) {
-          errors[i] = this.$t('common.fill') 
-          this.errorCount++;
+    generateDefaultData(model) {
+      let dData = {data: {}, errors: {}}
+      for(let modelAttr in model.attributes) {
+        if('dataModelType' in model.attributes[modelAttr]) {
+          if(dData.data[modelAttr] = model.attributes[modelAttr].dataModelType == 'array' ) {
+            dData.data[modelAttr] = []
+            dData.errors[modelAttr] = []
+          } else {
+            let subData = generateDefaultData(model.attributes[modelAttr])
+            dData.data[modelAttr] = subData.data
+            dData.errors[modelAttr] = subData.errors
+          }
+        } else {
+          dData.data[modelAttr] = 'default' in model.attributes[modelAttr] 
+            ? model.attributes[modelAttr].default : ''
+          dData.errors[modelAttr] = ''
         }
       }
+      return dData;
     },
 
-    //////////////// Non-generic stuff
+    addFormSubItem(subData, subErrors, subModel) {
+      let gData = this.generateDefaultData(subModel)
+      subData.unshift(gData.data)
+      subErrors.unshift(gData.errors)
+    },
+
+    deleteFormSubItem(subData, subErrors, index) {
+      subData.splice(index, 1)
+      subErrors.splice(index, 1)
+    },
+
+    validateFields(formErrors, model, data) {
+      let errorCount = 0
+      let modelAttr = ''
+      for(modelAttr in model.attributes) {
+        if('dataModelType' in model.attributes[modelAttr]) {
+          if(model.attributes[modelAttr].dataModelType == 'array' ) {
+            for(let item in data[modelAttr]) {
+              errorCount += this.validateFields(
+                formErrors[modelAttr][item], 
+                model.attributes[modelAttr], 
+                data[modelAttr][item])
+            }
+          } else {
+            errorCount += this.validateFields(formErrors[modelAttr], model[modelAttr], data[modelAttr])
+          }
+        } else {
+          formErrors[modelAttr] = ''
+          if('notEmpty' in model.attributes[modelAttr] && !data[modelAttr].match(/\S/)) {
+            formErrors[modelAttr] = this.$t('common.fill')
+            errorCount++;
+          }
+        }
+      }
+      return errorCount;
+    },
+
+    //////////////// Non-generic functions
 
     addInverter() {
       delete this.formErrors.invertersErr
-      this.addFormSubItem('inverter')
+      this.addFormSubItem(
+        this.data.inverters,
+        this.formErrors.inverters,
+        this.dataModel.attributes.inverters
+      )
     },
-
+    
     savePlant() {
 
-      this.formErrors = {}
       this.errorCount = 0;
-      this.validateFields(this.formErrors, this.model, this.data)
+      this.errorCount += this.validateFields(this.formErrors, this.dataModel, this.data)
 
-      this.formErrors.inverter = []
-      if(this.data.inverter.length == 0) {
+      if(this.data.inverters.length == 0) {
         this.formErrors.invertersErr = this.$t('inverters.noInverters')
-      } else {
-        for(let i in this.data.inverter) {
-          this.formErrors.inverter[i] = {}
-          this.validateFields(this.formErrors.inverter[i], this.subModels.inverter, this.data.inverter[i])
-        }
+        this.errorCount ++
       }
 
-      //console.log(JSON.stringify(this.formErrors))
-
+      //console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
       if(this.errorCount) {
         this.wuilertMsg = JSON.stringify({
           text: this.$t('common.fixErrors'),
