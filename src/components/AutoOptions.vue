@@ -1,7 +1,7 @@
 <template>
-    <option v-for="item in $props.m.attributes[f].opts" :key="item" :value="item">
+    <option v-for="item in $props.m.attr[f].opts" :key="item" :value="item">
         {{
-            'optsI' in $props.m.attributes[f]
+            'optsI' in $props.m.attr[f]
             ? $t($props.m.i18n + f + 'Options.' + item)
             : item
         }}

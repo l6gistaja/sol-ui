@@ -16,7 +16,7 @@ const messages = {
         },
 
         BESS: {
-            title: "BESS",
+            title: "Battery energy storage system",
             U: "Voltage",
             A: "Power",
             Pnom: "Nominal output power capacity",
@@ -47,6 +47,8 @@ const messages = {
                 "M": "medium voltage",
                 "H": "high voltage"
             },
+            lat: "Latitude",
+            lon: "Longitude",
             tz: "Timezone"
         }
     }
