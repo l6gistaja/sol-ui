@@ -40,11 +40,38 @@
         </template>
     </AutoForm>
 
-    <FormRowFull v-if="data.gridT != 'N'">
-      <template v-slot:field>
-        <strong>TODO: grid configuration will be here</strong>
-      </template>
-    </FormRowFull>
+    <div class="card sol-card-grid" v-if="data.gridT != 'N'">
+      <div class="card-body">
+        <div class="card-title sol-grouptitle">{{$t('grid.title')}}</div>
+          <AutoForm v-for="(autoP, autoF) in getVisibleAutoFields(dataModel.attr.grid, 'grid_')" 
+          :key="autoP.id"
+          :m="dataModel.attr.grid" :e="formErrors.grid" :f="autoF" :id="autoP.id">
+              <template v-slot:field>
+
+                <input
+                  v-if="autoP.textField"
+                  v-model="data.grid[autoF]"
+                  :type="autoP.type"
+                  :placeholder="autoP.placeholder"
+                  :id="autoP.id"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.grid[autoF] != ''}"/>
+
+                <!--
+                <select
+                  v-if="autoP.type == 'select'"
+                  v-model="data[autoF]"
+                  :id="autoP.id"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.grid[autoF] != ''}">
+                  <AutoOptions :m="dataModel.attr.grid" :f="autoF"></AutoOptions>
+                </select>
+                -->
+
+              </template>
+          </AutoForm>
+      </div>
+    </div>
 
 
     <!-- ----------- INVERTERS ----------- -->
@@ -302,8 +329,12 @@ export default {
             gridT: {default: "N", opts: ["N","L","M","H"], optsI: "~"},
             grid: {
               dataModelType: "map",
-              i18n: ".",
-              attr: {}
+              i18n: "grid.",
+              attr: {
+                joined: {notEmpty: 1, type: "date"},
+                out: {notEmpty: 1, type: "number", unit: "kW"},
+                in: {notEmpty: 1, type: "number", unit: "kW"}
+              }
             },
             inverters: {
               dataModelType: "array",
@@ -481,8 +512,18 @@ export default {
         this.errorCount ++
       }
 
+      //TODO: ad hoc fix
+      if(this.data.gridT == 'N') {
+        for(let f in this.formErrors.grid) {
+          if(this.formErrors.grid[f] !== '') {
+            this.errorCount --
+          }
+          this.formErrors.grid[f] = ''
+        }
+      }
+
       console.log('DATA' + JSON.stringify(this.data))
-      //console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
+      console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
       if(this.errorCount) {
         this.wuilertMsg = JSON.stringify({
           text: this.$t('common.fixErrors'),
@@ -500,9 +541,14 @@ export default {
 
 <style scoped>
 
-.sol-inverter-err {
-  color: red;
-  margin-top: 5px;
+.sol-card-consumer {
+  background-color: #c2c8fa;
+  margin-top: 8px;
+}
+
+.sol-card-grid {
+  background-color: #f8d3df;
+  margin-top: 8px;
 }
 
 .sol-card-inverter {
@@ -515,9 +561,9 @@ export default {
   margin-top: 8px;
 }
 
-.sol-card-consumer {
-  background-color: #c2c8fa;
-  margin-top: 8px;
+.sol-inverter-err {
+  color: red;
+  margin-top: 5px;
 }
 
 </style>

@@ -25,6 +25,13 @@ const messages = {
             Uc: "Charging max voltage"
         },
 
+        grid: {
+            title: "Grid",
+            joined: "Joined",
+            out: "Energy to grid",
+            in: "Energy from grid"
+        },
+
         inverters: {
             title: "Inverters",
             noInverters: "Plant should have at least one inverter.",
