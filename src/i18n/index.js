@@ -50,6 +50,16 @@ const messages = {
             lat: "Latitude",
             lon: "Longitude",
             tz: "Timezone"
+        },
+
+        producers: {
+            title: "Producers",
+            type: "Type"
+        },
+
+        consumers: {
+            title: "Consumers",
+            type: "Type"
         }
     }
 }

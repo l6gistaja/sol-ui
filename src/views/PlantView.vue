@@ -51,6 +51,7 @@
 
 
     <div class="sol-grouptitle">
+      <br/>
       <button class="btn btn-sm btn-success" :title="$t('common.add')" 
         @click="addInverter">
           +
@@ -58,9 +59,9 @@
       <strong>{{$t('inverters.title')}}</strong>
     </div>
 
-    <div v-if="'invertersErr' in formErrors" class="inverter-err">{{formErrors.invertersErr}}</div>
+    <div v-if="'invertersErr' in formErrors" class="sol-inverter-err">{{formErrors.invertersErr}}</div>
 
-    <div class="card inverter-card" v-for="(item, index) in data.inverters" :key="index">
+    <div class="card sol-card-inverter" v-for="(item, index) in data.inverters" :key="index">
 
       <div class="card-body">
 
@@ -90,12 +91,13 @@
             </template>
         </AutoForm>
 
-    <!-- ----------- BATTERIES ----------- -->
-
+        <!-- ----------- BATTERIES ----------- -->
 
         <FormRowFull>
           <template v-slot:field>
-            <div class="sol-grouptitle"><br/>{{$t('BESS.title')}}</div>
+            <br/>
+            <div class="sol-grouptitle">{{$t('BESS.title')}}</div>
+            <br/>
           </template>
         </FormRowFull>
 
@@ -140,6 +142,118 @@
       </div>
 
     </div>
+
+
+    <!-- ----------- PRODUCERS ----------- -->
+
+
+    <div class="sol-grouptitle">
+      <br/>
+      <button class="btn btn-sm btn-success" :title="$t('common.add')" 
+        @click="addFormSubItem(data.producers,formErrors.producers,dataModel.attr.producers)">
+          +
+      </button>&nbsp;
+      <strong>{{$t('producers.title')}}</strong>
+    </div>
+
+    <div class="card sol-card-producer" v-for="(item, index) in data.producers" :key="index">
+
+      <div class="card-body">
+
+        <AutoForm v-for="(autoP, autoF) in getVisibleAutoFields(dataModel.attr.producers, 'producers_'+index+'_')" 
+        :key="autoP.id"
+        :m="dataModel.attr.producers" :e="formErrors.producers[index]" :f="autoF" :id="autoP.id">
+            <template v-slot:field>
+
+              <input
+                v-if="autoP.textField"
+                v-model="item[autoF]"
+                :type="autoP.type"
+                :placeholder="autoP.placeholder"
+                :id="autoP.id"
+                class="form-control form-control-sm"
+                :class="{'is-invalid': formErrors.producers[index][autoF] != ''}"/>
+              
+              <select
+                v-if="autoP.type == 'select'"
+                v-model="item[autoF]"
+                :id="autoP.id"
+                class="form-control form-control-sm"
+                :class="{'is-invalid': formErrors.producers[index][autoF] != ''}">
+                <AutoOptions :m="dataModel.attr.producers" :f="autoF"></AutoOptions>
+              </select>
+
+            </template>
+        </AutoForm>
+
+        <FormRowFull>
+          <template v-slot:field>
+            <button class="btn btn-danger btn-sm" :title="$t('common.del')" 
+              @click="deleteFormSubItem(data.producers, formErrors.producers, index)">
+              {{$t('common.del')}}
+            </button>
+          </template>
+        </FormRowFull>
+
+      </div>
+
+    </div>
+
+    <!-- ----------- CONSUMERS ----------- -->
+
+
+    <div class="sol-grouptitle">
+      <br/>
+      <button class="btn btn-sm btn-success" :title="$t('common.add')" 
+        @click="addFormSubItem(data.consumers,formErrors.consumers,dataModel.attr.consumers)">
+          +
+      </button>&nbsp;
+      <strong>{{$t('consumers.title')}}</strong>
+    </div>
+
+    <div class="card sol-card-consumer" v-for="(item, index) in data.consumers" :key="index">
+
+      <div class="card-body">
+
+        <AutoForm v-for="(autoP, autoF) in getVisibleAutoFields(dataModel.attr.consumers, 'consumers_'+index+'_')" 
+        :key="autoP.id"
+        :m="dataModel.attr.producers" :e="formErrors.consumers[index]" :f="autoF" :id="autoP.id">
+            <template v-slot:field>
+
+              <input
+                v-if="autoP.textField"
+                v-model="item[autoF]"
+                :type="autoP.type"
+                :placeholder="autoP.placeholder"
+                :id="autoP.id"
+                class="form-control form-control-sm"
+                :class="{'is-invalid': formErrors.consumers[index][autoF] != ''}"/>
+              
+              <select
+                v-if="autoP.type == 'select'"
+                v-model="item[autoF]"
+                :id="autoP.id"
+                class="form-control form-control-sm"
+                :class="{'is-invalid': formErrors.consumers[index][autoF] != ''}">
+                <AutoOptions :m="dataModel.attr.consumers" :f="autoF"></AutoOptions>
+              </select>
+
+            </template>
+        </AutoForm>
+
+        <FormRowFull>
+          <template v-slot:field>
+            <button class="btn btn-danger btn-sm" :title="$t('common.del')" 
+              @click="deleteFormSubItem(data.consumers, formErrors.consumers, index)">
+              {{$t('common.del')}}
+            </button>
+          </template>
+        </FormRowFull>
+
+      </div>
+
+    </div>
+    
     
     <div class="sol-form-footer">
       <Wuilert :msg="wuilertMsg" />
@@ -215,6 +329,22 @@ export default {
                     Uc: {notEmpty: 1, type: "number", unit: "V"}
                   }
                 }
+              }
+            },
+            producers: {
+              dataModelType: "array",
+              i18n: "producers.",
+              attr: {
+                name: {notEmpty: 1, labelI: "common.name"},
+                type: {default: "Photovoltaic", opts: ["Photovoltaic", "Wind", "Generator"]}
+              }
+            },
+            consumers: {
+              dataModelType: "array",
+              i18n: "consumers.",
+              attr: {
+                name: {notEmpty: 1, labelI: "common.name"},
+                type: {default: "Electric Vehicle", opts: ["Electric Vehicle"]}
               }
             }
 
@@ -370,13 +500,23 @@ export default {
 
 <style scoped>
 
-.inverter-err {
+.sol-inverter-err {
   color: red;
   margin-top: 5px;
 }
 
-.inverter-card {
+.sol-card-inverter {
   background-color: #b8fad9;
+  margin-top: 8px;
+}
+
+.sol-card-producer {
+  background-color: #ecfcb4;
+  margin-top: 8px;
+}
+
+.sol-card-consumer {
+  background-color: #c2c8fa;
   margin-top: 8px;
 }
 
