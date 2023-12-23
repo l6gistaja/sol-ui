@@ -1,4 +1,5 @@
 
+ // TODO: AWS Node.js 16 Lambda support ends in 2024-06-12 ! 
  var AWS = require('aws-sdk'); // Doesn't work with Node 18, use 16 instead! 
  var IOTDATA = new AWS.IotData({
   endpoint: process.env.ENDPOINT, 

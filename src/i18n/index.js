@@ -15,28 +15,37 @@ const messages = {
             save: "Save"
         },
 
+        BESS: {
+            title: "BESS",
+            U: "Voltage",
+            A: "Power",
+            Pnom: "Nominal output power capacity",
+            Uw0: "Working min voltage",
+            Uw1: "Working max voltage",
+            Uc: "Charging max voltage"
+        },
+
         inverters: {
             title: "Inverters",
             noInverters: "Plant should have at least one inverter.",
-            serial: "Serial number",
-            shadow: "Shadow"
+            Pout: "Output power",
+            shadow: "Shadow",
+            Udc0: "DC min voltage",
+            Udc1: "DC max voltage",
+            Umppt0: "MPPT min voltage",
+            Umppt1: "MPPT max voltage",
+            Uac: "AC voltage",
         },
 
         plants: {
             title: "Plants",
             address: "Address",
-            grid: "Grid connection",
-            gridOptions: {
+            gridT: "Grid connection",
+            gridTOptions: {
                 "N": "not connected",
                 "L": "low voltage",
                 "M": "medium voltage",
                 "H": "high voltage"
-            },
-            type: "ESS type",
-            typeOptions: {
-                "P": "PV input included",
-                "C": "EV charge included",
-                "S": "ESS storage"
             },
             tz: "Timezone"
         }

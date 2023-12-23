@@ -12,49 +12,28 @@
       </ol>
     </nav>
 
-      <FormRow>
-        <template v-slot:label>{{$t('common.name')}}</template>
+    <AutoForm :m="dataModel" :e="formErrors" f="name">
         <template v-slot:field>
           <input
             v-model="data.name"
             type="text"
             :placeholder="$t('common.fill')"
             class="form-control form-control-sm"
-            :class="{'is-invalid': formErrors['name'] != ''}"
-          />
-          <div v-if="formErrors['name'] != ''" class="invalid-feedback">{{formErrors.name}}</div>
+            :class="{'is-invalid': formErrors['name'] != ''}"/>
         </template>
-      </FormRow>
-<!--
-      <FormRow>
-        <template v-slot:label>{{$t('plants.type')}}</template>
-        <template v-slot:field>
-          <select
-            v-model="data.type"
-            class="form-control form-control-sm"
-            >
-            <option v-for="item in model.type.options" :key="'type_'+item" :value="item">
-              {{$t('plants.typeOptions.' + item)}}
-            </option>
-          </select>
-        </template>
-      </FormRow>
+    </AutoForm>
 
-      <FormRow>
-        <template v-slot:label>{{$t('plants.grid')}}</template>
+    <AutoForm :m="dataModel" :e="formErrors" f="gridT">
         <template v-slot:field>
           <select
-            v-model="data.grid"
+            v-model="data.gridT"
             class="form-control form-control-sm">
-            <option v-for="item in model.grid.options" :key="'grid_'+item" :value="item">
-              {{ $t('plants.gridOptions.' + item) }}
-            </option>
+            <AutoOptions :m="dataModel" f="gridT"></AutoOptions>
           </select>
         </template>
-      </FormRow>
--->
-      <FormRow>
-        <template v-slot:label>{{$t('plants.address')}}</template>
+    </AutoForm>
+
+    <AutoForm :m="dataModel" :e="formErrors" f="address">
         <template v-slot:field>
           <input
             v-model="data.address"
@@ -62,21 +41,18 @@
             class="form-control form-control-sm"
           />
         </template>
-      </FormRow>
-<!--
-      <FormRow>
-        <template v-slot:label>{{$t('plants.tz')}}</template>
+    </AutoForm>
+
+    <AutoForm :m="dataModel" :e="formErrors" f="tz">
         <template v-slot:field>
           <select
             v-model="data.tz"
             class="form-control form-control-sm">
-            <option v-for="item in Intl.supportedValuesOf('timeZone')" :key="'tz_'+item" :value="item">
-              {{item}}
-            </option>
+            <AutoOptions :m="dataModel" f="tz"></AutoOptions>
           </select>
         </template>
-      </FormRow>
--->
+    </AutoForm>
+
       <div class="sol-grouptitle">
         <button class="btn btn-sm btn-success" :title="$t('common.add')" 
           @click="addInverter">
@@ -88,51 +64,209 @@
       <div v-if="'invertersErr' in formErrors" class="inverter-err">{{formErrors.invertersErr}}</div>
 
       <div class="card inverter-card" v-for="(item, index) in data.inverters" :key="index">
+
         <div class="card-body">
 
-          <FormRow>
-            <template v-slot:label>{{$t('common.name')}}</template>
-            <template v-slot:field>
-              <input
-                v-model="item.name"
-                type="text"
-                :placeholder="$t('common.fill')"
-                class="form-control form-control-sm"
-                :class="{'is-invalid': formErrors.inverters[index]['name'] != ''}" 
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="name">
+              <template v-slot:field>
+                <input
+                  v-model="item.name"
+                  type="text"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index]['name'] != ''}"/>
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="shadow">
+              <template v-slot:field>
+                <input
+                  v-model="item.shadow"
+                  type="text"
+                  placeholder="UUID"
+                  class="form-control form-control-sm"
                 />
-                <div v-if="formErrors.inverters[index]['name'] != ''" class="invalid-feedback">{{formErrors.inverters[index]['name']}}</div>
-            </template>
-          </FormRow>
+              </template>
+          </AutoForm>
 
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="Pout">
+              <template v-slot:field>
+                <input
+                  v-model="item.Pout"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index]['Pout'] != ''}"
+                />
+              </template>
+          </AutoForm>
 
-          <FormRow>
-            <template v-slot:label>{{$t('inverters.serial')}}</template>
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="Udc0">
+              <template v-slot:field>
+                <input
+                  v-model="item.Udc0"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index]['Udc0'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="Udc1">
+              <template v-slot:field>
+                <input
+                  v-model="item.Udc1"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index]['Udc1'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="Umppt0">
+              <template v-slot:field>
+                <input
+                  v-model="item.Umppt0"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index]['Umppt0'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="Umppt1">
+              <template v-slot:field>
+                <input
+                  v-model="item.Umppt1"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index]['Umppt1'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters" :e="formErrors.inverters[index]" f="Uac">
+              <template v-slot:field>
+                <select
+                  v-model="item.Uac"
+                  class="form-control form-control-sm">
+                  <AutoOptions :m="dataModel.attributes.inverters" f="Uac"></AutoOptions>
+                </select>
+              </template>
+          </AutoForm>
+
+          <FormRowFull>
             <template v-slot:field>
-              <input
-                v-model="item.serial"
-                type="text"
-                class="form-control form-control-sm"
-              />
+              <div class="sol-grouptitle">
+                {{$t('BESS.title')}}
+              </div>
             </template>
-          </FormRow>
+          </FormRowFull>
 
-          <FormRow>
-            <template v-slot:label>{{$t('inverters.shadow')}}</template>
+          <AutoForm :m="dataModel.attributes.inverters.attributes.BESS" 
+            :e="formErrors.inverters[index].BESS" f="U">
+              <template v-slot:field>
+                <input
+                  v-model="item.BESS.U"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index].BESS['U'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters.attributes.BESS" 
+            :e="formErrors.inverters[index].BESS" f="A">
+              <template v-slot:field>
+                <input
+                  v-model="item.BESS.A"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index].BESS['A'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters.attributes.BESS" 
+            :e="formErrors.inverters[index].BESS" f="Pnom">
+              <template v-slot:field>
+                <input
+                  v-model="item.BESS.Pnom"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index].BESS['Pnom'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters.attributes.BESS" 
+            :e="formErrors.inverters[index].BESS" f="Uw0">
+              <template v-slot:field>
+                <input
+                  v-model="item.BESS.Uw0"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index].BESS['Uw0'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters.attributes.BESS" 
+            :e="formErrors.inverters[index].BESS" f="Uw1">
+              <template v-slot:field>
+                <input
+                  v-model="item.BESS.Uw1"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index].BESS['Uw1'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <AutoForm :m="dataModel.attributes.inverters.attributes.BESS" 
+            :e="formErrors.inverters[index].BESS" f="Uc">
+              <template v-slot:field>
+                <input
+                  v-model="item.BESS.Uc"
+                  type="number"
+                  min="0"
+                  :placeholder="$t('common.fill')"
+                  class="form-control form-control-sm"
+                  :class="{'is-invalid': formErrors.inverters[index].BESS['Uc'] != ''}"
+                />
+              </template>
+          </AutoForm>
+
+          <FormRowFull>
             <template v-slot:field>
-              <input
-                v-model="item.shadow"
-                type="text"
-                class="form-control form-control-sm"
-              />
+              <button class="btn btn-danger btn-sm" :title="$t('common.del')" 
+                @click="deleteFormSubItem(data.inverters, formErrors.inverters, index)">
+                {{$t('common.del')}}
+              </button>
             </template>
-          </FormRow>
-
-          <button class="btn btn-danger btn-sm" :title="$t('common.del')" 
-            @click="deleteFormSubItem(data.inverters, formErrors.inverters, index)">
-            {{$t('common.del')}}
-          </button>
+          </FormRowFull>
 
         </div>
+
       </div>
       
       <div class="sol-form-footer">
@@ -140,7 +274,7 @@
         <button class="btn btn-primary" @click="savePlant">{{$t('common.save')}}</button>&nbsp; 
         <button class="btn btn-warning" @click="$router.push({name: 'plants'})">{{$t('common.cancel')}}</button>
       </div>
-      
+
   </main>
 </template>
 
@@ -150,7 +284,10 @@ import { Amplify } from 'aws-amplify'
 import awsconfig from '../aws-exports'
 Amplify.configure(awsconfig)
 import { get, post } from 'aws-amplify/api'
+import AutoForm from '../components/AutoForm.vue'
+import AutoOptions from '../components/AutoOptions.vue'
 import FormRow from '../components/FormRow.vue'
+import FormRowFull from '../components/FormRowFull.vue'
 import Wuilert from '../components/Wuilert.vue'
 </script>
 
@@ -168,19 +305,37 @@ export default {
 
         dataModel: {
           dataModelType: "map",
+          i18n: "plants.",
           attributes: {
-            name: {notEmpty: 1},
-            type: {default: "S", options: ["S","P","C"], i18n: "~"},
-            grid: {default: "N", options: ["N","L","M","H"], i18n: "~"},
+            i: {},
+            name: {notEmpty: 1, labelI: "common.name"},
+            gridT: {default: "N", opts: ["N","L","M","H"], optsI: "~"},
             address: {},
-            //Intl.DateTimeFormat().resolvedOptions().timeZone
-            tz: {default: "Europe/Tallinn", options: ["Europe/Tallinn"]},
+            tz: {default: "Europe/Tallinn", opts: ["Europe/Tallinn"]},
             inverters: {
-              dataModelType: 'array',
+              dataModelType: "array",
+              i18n: "inverters.",
               attributes: {
-                name: {notEmpty: 1},
-                serial: {},
-                shadow: {}
+                name: {notEmpty: 1, labelI: "common.name"},
+                shadow: {},
+                Pout: {notEmpty: 1, unit: "kW"},
+                Udc0: {notEmpty: 1, unit: "V"},
+                Udc1: {notEmpty: 1, unit: "V"},
+                Umppt0: {notEmpty: 1, unit: "V"},
+                Umppt1: {notEmpty: 1, unit: "V"},
+                Uac: {default: 230, opts: [230,400], unit: "V"},
+                BESS: {
+                  dataModelType: "map",
+                  i18n: "BESS.",
+                  attributes: {
+                    U: {notEmpty: 1, unit: "V"},
+                    A: {notEmpty: 1, unit: "Ah"},
+                    Pnom: {notEmpty: 1, unit: "kW"},
+                    Uw0: {notEmpty: 1, unit: "V"},
+                    Uw1: {notEmpty: 1, unit: "V"},
+                    Uc: {notEmpty: 1, unit: "V"}
+                  }
+                }
               }
             }
 
@@ -190,9 +345,15 @@ export default {
   },
 
   created() {
+
+    // TODO: catch exceptions when there is no browser support
+    this.dataModel.attributes.tz.opts = Intl.supportedValuesOf('timeZone')
+    this.dataModel.attributes.tz.default = Intl.DateTimeFormat().resolvedOptions().timeZone
+
     let gData = this.generateDefaultData(this.dataModel)
     this.data = gData.data
     this.formErrors = gData.errors
+
   },
   
   methods: {
@@ -207,7 +368,7 @@ export default {
             dData.data[modelAttr] = []
             dData.errors[modelAttr] = []
           } else {
-            let subData = generateDefaultData(model.attributes[modelAttr])
+            let subData = this.generateDefaultData(model.attributes[modelAttr])
             dData.data[modelAttr] = subData.data
             dData.errors[modelAttr] = subData.errors
           }
@@ -241,14 +402,18 @@ export default {
               errorCount += this.validateFields(
                 formErrors[modelAttr][item], 
                 model.attributes[modelAttr], 
-                data[modelAttr][item])
+                data[modelAttr][item]
+              )
             }
           } else {
-            errorCount += this.validateFields(formErrors[modelAttr], model[modelAttr], data[modelAttr])
+            errorCount += this.validateFields(
+              formErrors[modelAttr], 
+              model.attributes[modelAttr],
+              data[modelAttr])
           }
         } else {
           formErrors[modelAttr] = ''
-          if('notEmpty' in model.attributes[modelAttr] && !data[modelAttr].match(/\S/)) {
+          if('notEmpty' in model.attributes[modelAttr] && !(''+data[modelAttr]).match(/\S/)) {
             formErrors[modelAttr] = this.$t('common.fill')
             errorCount++;
           }
@@ -278,6 +443,7 @@ export default {
         this.errorCount ++
       }
 
+      //console.log('DATA' + JSON.stringify(this.data))
       //console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
       if(this.errorCount) {
         this.wuilertMsg = JSON.stringify({

@@ -1,11 +1,11 @@
 <template>
   <div>
-    
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb sol-breadcrumb">
-          <li class="breadcrumb-item active">Statistics (DEMO)</li>
-        </ol>
-      </nav>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb sol-breadcrumb">
+        <li class="breadcrumb-item active">Statistics (DEMO)</li>
+      </ol>
+    </nav>
 
     <Line :data="data" :options="options" />
   </div>
