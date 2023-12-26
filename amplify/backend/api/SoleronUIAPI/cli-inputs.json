@@ -1,6 +1,19 @@
 {
   "version": 1,
   "paths": {
+    "/shadow": {
+      "name": "/shadow",
+      "lambdaFunction": "UiApiShadow",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
     "/test": {
       "name": "/test",
       "lambdaFunction": "UiApiTest",
@@ -14,9 +27,9 @@
         ]
       }
     },
-    "/shadow": {
-      "name": "/shadow",
-      "lambdaFunction": "UiApiShadow",
+    "/plants": {
+      "name": "/plants",
+      "lambdaFunction": "UiApiPlants",
       "permissions": {
         "setting": "private",
         "auth": [

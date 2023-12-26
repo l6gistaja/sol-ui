@@ -1,4 +1,5 @@
 
+const SolAws = require("./SolAws")
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -10,6 +11,9 @@
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "*"
         },
-        body: JSON.stringify({event:event, context:context}),
+        body: JSON.stringify({
+            uuid: SolAws.getUserUuidFromLambda(event),
+            event:event,
+            context:context}),
     };
 };

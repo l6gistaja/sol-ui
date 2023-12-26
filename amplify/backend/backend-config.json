@@ -8,6 +8,14 @@
             "Arn"
           ],
           "category": "function",
+          "resourceName": "UiApiShadow"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
           "resourceName": "UiApiTest"
         },
         {
@@ -16,7 +24,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "UiApiShadow"
+          "resourceName": "UiApiPlants"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -52,6 +60,25 @@
     }
   },
   "function": {
+    "UiApiPlants": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "Plants"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "UiApiShadow": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -64,6 +91,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_UiApiPlants_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UiApiPlants"
+        }
+      ]
+    },
+    "AMPLIFY_function_UiApiPlants_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UiApiPlants"
+        }
+      ]
+    },
     "AMPLIFY_function_UiApiShadow_deploymentBucketName": {
       "usedBy": [
         {
@@ -97,5 +140,10 @@
       ]
     }
   },
-  "storage": {}
+  "storage": {
+    "Plants": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    }
+  }
 }

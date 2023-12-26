@@ -7,12 +7,15 @@ const messages = {
             add: "Add",
             cancel: "Cancel",
             edit: "Edit",
+            dbError: "Database error occured: {dbErr}",
             del: "Delete",
             fill: "Please fill this field.",
             fixErrors: "Fix form errors above.",
+            found0: "Search didn't find anything.",
             logout: "Logout",
             name: "Name",
-            save: "Save"
+            save: "Save",
+            sureDel: "Are you sure you want to delete this item?"
         },
 
         BESS: {

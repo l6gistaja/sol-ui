@@ -9,6 +9,7 @@
         </nav>
       </template>
     </authenticator>
+    <!-- {{JSON.stringify([route,user])}} -->
     <!-- .{{route}}. <button class="btn btn-danger" @click="signOut">Signout</button> -->
   </div>
 </template>

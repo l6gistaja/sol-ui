@@ -11,6 +11,10 @@
         </li>
       </ol>
     </nav>
+    
+    <Spinner v-if="searching"></Spinner>
+
+    <div v-if="!searching">
 
     <!-- ----------- MAIN SECTION ----------- -->
 
@@ -227,7 +231,7 @@
     </div>
 
     <!-- ----------- CONSUMERS ----------- -->
-
+     
 
     <div class="sol-grouptitle">
       <br/>
@@ -281,11 +285,13 @@
 
     </div>
     
-    
     <div class="sol-form-footer">
       <Wuilert :msg="wuilertMsg" />
       <button class="btn btn-primary" @click="savePlant">{{$t('common.save')}}</button>&nbsp; 
-      <button class="btn btn-warning" @click="$router.push({name: 'plants'})">{{$t('common.cancel')}}</button>
+      <button class="btn btn-warning" @click="$router.push({name: 'plants'})">{{$t('common.cancel')}}</button>&nbsp;
+      <button v-if="idParts.length == 2" class="btn btn-danger" @click="deletePlant">{{$t('common.del')}}</button>
+    </div>
+
     </div>
 
   </main>
@@ -296,12 +302,21 @@
 import { Amplify } from 'aws-amplify'
 import awsconfig from '../aws-exports'
 Amplify.configure(awsconfig)
-import { get, post } from 'aws-amplify/api'
+import { del, get, post, put } from 'aws-amplify/api'
+
+import { toRefs } from 'vue'
+import { useAuthenticator } from '@aws-amplify/ui-vue'
+
+import Slug64 from '../lib/Slug64';
+import SolAws from '../lib/SolAws'
+
 import AutoForm from '../components/AutoForm.vue'
 import AutoOptions from '../components/AutoOptions.vue'
 import FormRow from '../components/FormRow.vue'
 import FormRowFull from '../components/FormRowFull.vue'
+import Spinner from '../components/Spinner.vue'
 import Wuilert from '../components/Wuilert.vue'
+
 </script>
 
 <script>
@@ -311,15 +326,21 @@ export default {
   
   data() {
     return {
+        user: null,
         data: {},
         formErrors: {},
         errorCount: 0,
         wuilertMsg: '{"msg":""}',
+        msg: '',
+        searching: false,
+        idParts: [],
 
         dataModel: {
           dataModelType: "map",
           i18n: "plants.",
           attr: {
+            creator: {default: "", type: "hidden"},
+            created: {type: "hidden"},
             installer: {type: "hidden"},
             name: {notEmpty: 1, labelI: "common.name"},
             address: {},
@@ -384,15 +405,40 @@ export default {
     };
   },
 
-  created() {
+  async created() {
 
     // TODO: catch exceptions when there is no browser support
     this.dataModel.attr.tz.opts = Intl.supportedValuesOf('timeZone')
     this.dataModel.attr.tz.default = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-    let gData = this.generateDefaultData(this.dataModel)
+    let gData = this.generateDefaultData(this.dataModel, {})
     this.data = gData.data
     this.formErrors = gData.errors
+
+    const { user } = toRefs(useAuthenticator())
+    this.user = user
+
+    if(this.$route.params.id.match(/^[.\-0-9A-Za-z]+_[\d]+$/)) {
+      this.idParts = this.$route.params.id.split('_')
+      this.searching = true
+      this.msg = ''
+      try {
+        const restOperation = get({ 
+          apiName: 'SoleronUIAPI',
+          path: '/plants/object/'+this.idParts[0]+'/'+this.idParts[1],
+          options: { queryParams: {} }
+        });
+        const { body } = await restOperation.response
+        let bodyTxt = await body.text()
+        let plant = JSON.parse(bodyTxt)
+        gData = this.generateDefaultData(this.dataModel, plant)
+        this.data = gData.data
+        this.formErrors = gData.errors
+      } catch (error) {
+        this.msg = this.$t('common.dbError', {dbErr: error})
+      }
+      this.searching = false
+    }
 
   },
   
@@ -429,21 +475,35 @@ export default {
       return y
     },
 
-    generateDefaultData(model) {
+    generateDefaultData(model, actualData) {
       let dData = {data: {}, errors: {}}
       for(let modelAttr in model.attr) {
         if('dataModelType' in model.attr[modelAttr]) {
           if(dData.data[modelAttr] = model.attr[modelAttr].dataModelType == 'array' ) {
             dData.data[modelAttr] = []
             dData.errors[modelAttr] = []
+            if(modelAttr in actualData) {
+              for(let arrayItem in actualData[modelAttr]) {
+                let subData = this.generateDefaultData(
+                  model.attr[modelAttr], 
+                  actualData[modelAttr][arrayItem]
+                )
+                dData.data[modelAttr].push(subData.data)
+                dData.errors[modelAttr].push(subData.errors)
+              }
+            }
           } else {
-            let subData = this.generateDefaultData(model.attr[modelAttr])
+            let subData = this.generateDefaultData(
+              model.attr[modelAttr], 
+              modelAttr in actualData ? actualData[modelAttr] : {}
+            )
             dData.data[modelAttr] = subData.data
             dData.errors[modelAttr] = subData.errors
           }
         } else {
-          dData.data[modelAttr] = 'default' in model.attr[modelAttr] 
-            ? model.attr[modelAttr].default : ''
+          dData.data[modelAttr] = modelAttr in actualData
+            ? actualData[modelAttr]
+            : ('default' in model.attr[modelAttr] ? model.attr[modelAttr].default : '')
           dData.errors[modelAttr] = ''
         }
       }
@@ -451,7 +511,7 @@ export default {
     },
 
     addFormSubItem(subData, subErrors, subModel) {
-      let gData = this.generateDefaultData(subModel)
+      let gData = this.generateDefaultData(subModel, {})
       subData.unshift(gData.data)
       subErrors.unshift(gData.errors)
     },
@@ -501,8 +561,26 @@ export default {
         this.dataModel.attr.inverters
       )
     },
+
+    async deletePlant() {
+      if(this.idParts.length == 2 && confirm(this.$t('common.sureDel'))) {
+        try {
+          const restOperation = del({ 
+            apiName: 'SoleronUIAPI',
+            path: '/plants/object/'+this.idParts[0]+'/'+this.idParts[1],
+            options: { queryParams: {} }
+          });
+          const { body } = await restOperation.response
+          let response = await body.text()
+          console.log('Response DELETE : '+response)
+          this.$router.push({name: 'plants'})
+        } catch (error) {
+          this.msg = this.$t('common.dbError', {dbErr: error})
+        }
+      }
+    },
     
-    savePlant() {
+    async savePlant() {
 
       this.errorCount = 0;
       this.errorCount += this.validateFields(this.formErrors, this.dataModel, this.data)
@@ -522,14 +600,44 @@ export default {
         }
       }
 
-      console.log('DATA' + JSON.stringify(this.data))
-      console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
       if(this.errorCount) {
         this.wuilertMsg = JSON.stringify({
           text: this.$t('common.fixErrors'),
           t: Date.now(),
         });
+        //console.log('DATA' + JSON.stringify(this.data))
+        //console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
       } else {
+
+        if(this.$route.params.id == 'add') {
+
+          this.data.creator = Slug64.uuidToSlug64(this.user.userId)
+          this.data.created = SolAws.getSolStamp((new Date()).getTime())
+          const restOperation = put({ 
+            apiName: 'SoleronUIAPI',
+            path: '/plants',
+            options: { body: this.data }
+          });
+          const { body } = await restOperation.response
+          let response = await body.text()
+          console.log('Response PUT : '+response)
+
+        } else {
+
+          const restOperation = post({ 
+            apiName: 'SoleronUIAPI',
+            path: '/plants',
+            options: { body: this.data }
+          });
+          const { body } = await restOperation.response
+          let response = await body.text()
+          console.log('Response POST : '+response)
+
+        }
+
+        //console.log('DATA' + JSON.stringify(this.data))
+        //console.log('ERRORS' + JSON.stringify(this.formErrors) + ' ' + this.errorCount)
+
         this.$router.push({name: 'plants'})
       }
 
@@ -543,22 +651,22 @@ export default {
 
 .sol-card-consumer {
   background-color: #c2c8fa;
-  margin-top: 8px;
+  margin-top: 18px;
 }
 
 .sol-card-grid {
   background-color: #f8d3df;
-  margin-top: 8px;
+  margin-top: 18px;
 }
 
 .sol-card-inverter {
   background-color: #b8fad9;
-  margin-top: 8px;
+  margin-top: 18px;
 }
 
 .sol-card-producer {
   background-color: #ecfcb4;
-  margin-top: 8px;
+  margin-top: 18px;
 }
 
 .sol-inverter-err {

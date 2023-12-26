@@ -1,0 +1,14 @@
+{
+  "resourceName": "Plants",
+  "tableName": "Plants",
+  "partitionKey": {
+    "fieldName": "creator",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "created",
+    "fieldType": "number"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
