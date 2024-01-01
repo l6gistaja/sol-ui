@@ -2,11 +2,7 @@
   <div class="aws-auth-wrapper">
     <authenticator :services="services">
       <template v-slot="{ user, signOut }">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb sol-breadcrumb">
-            <li class="breadcrumb-item active">Welcome to Soleron user interface!</li>
-          </ol>
-        </nav>
+        <strong>Welcome to Soleron user interface!</strong>
       </template>
     </authenticator>
   </div>
