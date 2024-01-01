@@ -1,6 +1,6 @@
 <template>
   <div class="aws-auth-wrapper">
-    <authenticator>
+    <authenticator :services="services">
       <template v-slot="{ user, signOut }">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb sol-breadcrumb">
@@ -9,35 +9,31 @@
         </nav>
       </template>
     </authenticator>
-    <!-- {{JSON.stringify([route,user])}} -->
-    <!-- .{{route}}. <button class="btn btn-danger" @click="signOut">Signout</button> -->
   </div>
 </template>
 
 <script setup>
+
   import "@aws-amplify/ui-vue/styles.css"
   import { Amplify } from 'aws-amplify'
+  import { signIn, signOut } from 'aws-amplify/auth'
   import awsconfig from '../aws-exports'
   Amplify.configure(awsconfig)
 
-
-  import { toRefs } from 'vue'
-  import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue'
-  const { route, user, signOut } = toRefs(useAuthenticator())
-
 </script>
 <script>
-/*
-export default {
-  data() {
-    return {}
-  },
-  mounted() {
-    console.log('cookie '+window.document.cookie, this.user)
-  }
 
+const services = {
+  async handleSignIn(formData) {
+    let { username, password } = formData
+    await signOut()
+    return signIn({ username, password })
+  }
 }
-*/
+
+export default {
+  name: 'login'
+}
 
 </script>
 

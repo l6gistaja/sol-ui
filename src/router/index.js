@@ -46,15 +46,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  //console.log('Route to: ' + to.name + '; Auth status: ' + auth.route)
   if(auth.route !== 'authenticated' && to.name !== 'login') { 
-    //auth.signOut()
-    //console.log('Route2 to: ' + to.name + '; Auth status: ' + auth.route)
-    //next({name:'login'}) 
+    next({name:'login'}) 
   }
   next()
 });
-
-
 
 export default router

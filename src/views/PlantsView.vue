@@ -38,7 +38,7 @@ import Spinner from '../components/Spinner.vue'
 <script>
 
 export default {
-  components: { Spinner },
+  //components: { Spinner },
   name: 'plants',
   
   data() {

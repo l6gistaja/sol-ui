@@ -1,6 +1,6 @@
 <template>
   <div class="conatiner-fluid">
-    <div class="row" v-if="auth.route === 'authenticated'">
+    <div class="row" v-if="route === 'authenticated'">
       <!-- Toggle Button for Small Views -->
       <!-- Vertical Navbar -->
       <nav class="navbar navbar-expand-md navbar-light bg-light d-md-none">
@@ -33,7 +33,7 @@
             <RouterLink :to="{ name: 'sandbox' }" class="nav-link">Sandbox</RouterLink>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click="auth.signOut">{{ $t("common.logout") }}</a>
+            <a class="nav-link" href="#" @click="signOut">{{ $t("common.logout") }}</a>
           </li>
         </ul>
       </div>
@@ -43,38 +43,35 @@
       </main>
     </div>
 
-    <div class="row" v-if="auth.route !== 'authenticated'">
+    <div class="row" v-if="route !== 'authenticated'">
       <RouterView />
     </div>
+
   </div>
 </template>
 
 <script setup>
   import { RouterLink, RouterView } from "vue-router";
+  import { toRefs } from 'vue'
   import { useAuthenticator } from "@aws-amplify/ui-vue";
-  const auth = useAuthenticator();
+  const { route, user, signOut } = toRefs(useAuthenticator())
 </script>
 
 <script>
-/*
+
 export default {
-  data: function () {
-    return {
-    };
-  },
-  mounted() {
-  },
-  methods: {
-  },
-};
-*/
+  name: 'app'
+}
+
 </script>
 
 <style scoped>
+
 @media (min-width: 768px) {
   /* md breakpoint in Bootstrap 5 */
   .full-height-nav {
     min-height: 100vh;
   }
 }
+
 </style>
