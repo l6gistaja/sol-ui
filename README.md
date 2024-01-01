@@ -27,3 +27,12 @@ npm run dev
 ```sh
 npm run build
 ```
+## Social provider setup
+
+https://docs.amplify.aws/vue/build-a-backend/auth/add-social-provider/
+
+### Google provider setup
+
+https://stackoverflow.com/questions/66146633/login-option-is-not-available-please-try-another-one
+
+https://www.youtube.com/watch?v=pKA8qXINjkU
