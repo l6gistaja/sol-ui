@@ -284,6 +284,66 @@
       </div>
 
     </div>
+
+    <!-- SHADOW -->
+    <!-- TODO: i18n & better handling for different inventer types -->
+    
+    <div v-if="shadow.visible == 'error'" class="sol-inverter-err">
+      <br/>
+      Can't load live data. Is invereter's shadow value correct?
+    </div>
+
+    <div v-if="shadow.visible == 'shadow'">
+      <br/>
+
+      <table class="table table-bordered table-sm w-auto">
+        <thead>
+        <tr>
+          <th>Phases</th>
+          <th>A</th>
+          <th>B</th>
+          <th>C</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Grid Voltage</td>
+          <td>{{shadow.data.state.reported.raw['Grid Voltage A']}}</td>
+          <td>{{shadow.data.state.reported.raw['Grid Voltage B']}}</td>
+          <td>{{shadow.data.state.reported.raw['Grid Voltage C']}}</td>
+        </tr>
+        <tr>
+          <td>Grid Current</td>
+          <td>{{shadow.data.state.reported.raw['Grid Current A']}}</td>
+          <td>{{shadow.data.state.reported.raw['Grid Current B']}}</td>
+          <td>{{shadow.data.state.reported.raw['Grid Current C']}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <strong>Battery</strong>
+      <table class="table table-bordered table-sm w-auto">
+        <tbody>
+        <tr>
+          <td>Voltage</td>
+          <td>{{shadow.data.state.reported.raw['BAT Voltage']}}</td>
+        </tr>
+        <tr>
+          <td>Current</td>
+          <td>{{shadow.data.state.reported.raw['BAT Current']}}</td>
+        </tr>
+        <tr>
+          <td>SoC</td>
+          <td>{{shadow.data.state.reported.raw['BAT SOC']}}</td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td>{{shadow.data.state.reported.raw['BAT Temperature']}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
     
     <div class="sol-form-footer">
       <Wuilert :msg="wuilertMsg" />
@@ -334,6 +394,10 @@ export default {
         msg: '',
         searching: false,
         idParts: [],
+        shadow: {
+          visible: 'none',
+          timerId: null
+        },
 
         dataModel: {
           dataModelType: "map",
@@ -434,12 +498,24 @@ export default {
         gData = this.generateDefaultData(this.dataModel, plant)
         this.data = gData.data
         this.formErrors = gData.errors
+        if(this.data.inverters.length > 0) {
+          this.shadowLoad();
+          if (this.shadow.timerId === null) { this.shadow.timerId = setInterval(this.shadowLoad, 30000); }
+        }
       } catch (error) {
         this.msg = this.$t('common.dbError', {dbErr: error})
       }
       this.searching = false
     }
 
+  },
+
+  beforeUnmount() {
+    this.shadowStopPolling()
+  },
+
+  beforeDestroy() {
+    this.shadowStopPolling()
   },
   
   methods: {
@@ -552,6 +628,44 @@ export default {
     },
 
     //////////////// Non-generic functions
+    
+    async shadowLoad() {
+
+      if(this.data.inverters[0].shadow.length != 36) {
+        this.shadow.visible = 'error'
+        return
+      }
+
+      if(this.shadow.visible != 'shadow') {
+        this.shadow.visible = 'loading'
+      }
+
+      try {
+        const restOperation = get({ 
+          apiName: 'SoleronUIAPI',
+          path: '/shadow',
+          options: {
+            queryParams: {
+              thing: this.data.inverters[0].shadow
+            }
+          }
+        });
+        const { body } = await restOperation.response
+        this.shadow.data = JSON.parse(await body.text())
+        this.shadow.visible = 'shadow'
+      } catch (error) {
+        this.shadow.visible = 'error'
+        console.log('Shadow didnt load: ' + error)
+      }
+
+    },
+
+    shadowStopPolling() {
+      if (this.shadow.timerId !== null) {
+        clearInterval(this.shadow.timerId);
+        this.shadow.timerId = null;
+      }
+    },
 
     addInverter() {
       delete this.formErrors.invertersErr
@@ -672,6 +786,12 @@ export default {
 .sol-inverter-err {
   color: red;
   margin-top: 5px;
+}
+
+.sol-shadowphases.table {
+    border-collapse: collapse;
+    border: 1px solid;
+    padding: 2px;
 }
 
 </style>

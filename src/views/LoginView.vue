@@ -1,6 +1,5 @@
 <template>
   <div class="aws-auth-wrapper">
-    <!-- socialProviders="{['google']}" -->
     <authenticator :services="services">
       <template v-slot="{ user, signOut }">
         <strong>Welcome to Soleron user interface!</strong>
