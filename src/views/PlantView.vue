@@ -293,7 +293,24 @@
       Can't load live data. Is invereter's shadow value correct?
     </div>
 
-    <div v-if="shadow.visible == 'shadow'">
+    <FormRowFull v-if="shadow.visible == 'shadow'">
+      <template v-slot:field>
+        <br/>
+        <select
+          v-model="desiredMode"
+          class="form-control-sm">
+          <AutoOptions :m="{attr:{modes:{opts:['grid-in','grid-out']}}}" f="modes"></AutoOptions>
+        </select>
+        <button class="btn btn-info btn-sm" style="margin-left: 8px;"
+          @click="changeDesired">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" 
+            v-if="desiredStatus == 'loading'"></span>
+          Change status
+        </button>
+      </template>
+    </FormRowFull>
+
+    <div v-if="(shadow.visible == 'shadow') && ('api' in shadow.data.state.reported)">
       <br/>
 
       <table class="table table-bordered table-sm w-auto">
@@ -308,37 +325,38 @@
         <tbody>
         <tr>
           <td>Grid Voltage</td>
-          <td>{{shadow.data.state.reported.raw['Grid Voltage A']}}</td>
-          <td>{{shadow.data.state.reported.raw['Grid Voltage B']}}</td>
-          <td>{{shadow.data.state.reported.raw['Grid Voltage C']}}</td>
+          <td>{{shadow.data.state.reported.api['grid voltage A']}}</td>
+          <td>{{shadow.data.state.reported.api['grid voltage B']}}</td>
+          <td>{{shadow.data.state.reported.api['grid voltage C']}}</td>
         </tr>
         <tr>
           <td>Grid Current</td>
-          <td>{{shadow.data.state.reported.raw['Grid Current A']}}</td>
-          <td>{{shadow.data.state.reported.raw['Grid Current B']}}</td>
-          <td>{{shadow.data.state.reported.raw['Grid Current C']}}</td>
+          <td>{{shadow.data.state.reported.api['grid current A']}}</td>
+          <td>{{shadow.data.state.reported.api['grid current B']}}</td>
+          <td>{{shadow.data.state.reported.api['grid current C']}}</td>
+        </tr>
+        <tr>
+          <td>Grid Power</td>
+          <td>{{shadow.data.state.reported.api['grid power A']}}</td>
+          <td>{{shadow.data.state.reported.api['grid power B']}}</td>
+          <td>{{shadow.data.state.reported.api['grid power C']}}</td>
         </tr>
         </tbody>
       </table>
-
       <strong>Battery</strong>
       <table class="table table-bordered table-sm w-auto">
         <tbody>
         <tr>
           <td>Voltage</td>
-          <td>{{shadow.data.state.reported.raw['BAT Voltage']}}</td>
-        </tr>
-        <tr>
-          <td>Current</td>
-          <td>{{shadow.data.state.reported.raw['BAT Current']}}</td>
+          <td>{{shadow.data.state.reported.api['battery voltage']}}</td>
         </tr>
         <tr>
           <td>SoC</td>
-          <td>{{shadow.data.state.reported.raw['BAT SOC']}}</td>
+          <td>{{shadow.data.state.reported.api['battery SOC']}}</td>
         </tr>
         <tr>
           <td>Temperature</td>
-          <td>{{shadow.data.state.reported.raw['BAT Temperature']}}</td>
+          <td>{{shadow.data.state.reported.api['battery temperature']}}</td>
         </tr>
         </tbody>
       </table>
@@ -398,6 +416,8 @@ export default {
           visible: 'none',
           timerId: null
         },
+        desiredStatus: '',
+        desiredMode: 'grid-out',
 
         dataModel: {
           dataModelType: "map",
@@ -646,12 +666,19 @@ export default {
           path: '/shadow',
           options: {
             queryParams: {
-              thing: this.data.inverters[0].shadow
+              thing: this.data.inverters[0].shadow // TODO
             }
           }
         });
         const { body } = await restOperation.response
         this.shadow.data = JSON.parse(await body.text())
+        if(
+          'desired' in this.shadow.data.state
+          && 'api' in this.shadow.data.state.desired
+          && 'mode' in this.shadow.data.state.desired.api
+        ) {
+          this.desiredMode = this.shadow.data.state.desired.api.mode
+        }
         this.shadow.visible = 'shadow'
       } catch (error) {
         this.shadow.visible = 'error'
@@ -755,7 +782,26 @@ export default {
         this.$router.push({name: 'plants'})
       }
 
+    },
+
+    async changeDesired() {
+      this.desiredStatus = 'loading'
+      try {
+        const restOperation = post({
+          apiName: 'SoleronUIAPI',
+          path: '/shadow',
+          options: {
+            queryParams: {thing: this.data.inverters[0].shadow}, // TODO
+            body: {"api":{"mode": this.desiredMode}}
+          }
+        })
+        const { body } = await restOperation.response
+      } catch (error) {
+        console.log('Desired change failed: ' + error)
+      }
+      this.desiredStatus = ''
     }
+
   }
   
 };
